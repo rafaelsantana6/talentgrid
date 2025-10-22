@@ -1,0 +1,337 @@
+# Talent Grid - Cursor Rules
+
+## 🎯 Visão Geral do Projeto
+Este é um sistema ERP completo para gestão de Recursos Humanos empresariais, desenvolvido como monorepo com PNPM Workspaces, TypeScript, Fastify, Prisma e PostgreSQL. O projeto segue princípios SOLID e Domain-Driven Design (DDD).
+
+## 📁 Estrutura do Projeto
+```
+talentgrid/
+├── apps/
+│   ├── api/          # Backend API (Fastify + TypeScript)
+│   └── web/          # Frontend Web Application
+├── packages/         # Pacotes compartilhados
+│   └── typescript-config/
+├── docs/            # Documentação
+└── tools/           # Scripts e ferramentas
+```
+
+## 🛠️ Stack Tecnológica
+- **Gerenciamento**: PNPM Workspaces + Turbo
+- **Backend**: TypeScript + Fastify + Prisma
+- **Banco**: PostgreSQL
+- **Testes**: Vitest + Coverage
+- **Qualidade**: Biome (Linting + Formatting)
+- **Arquitetura**: SOLID + DDD
+
+## 📋 Padrões de Desenvolvimento
+
+### 🏗️ Arquitetura e Organização
+- **SEMPRE** siga os princípios SOLID
+- **SEMPRE** aplique Domain-Driven Design (DDD)
+- **SEMPRE** organize código por domínios/contextos
+- **SEMPRE** use injeção de dependências
+- **SEMPRE** mantenha separação clara entre camadas (Domain, Application, Infrastructure, Presentation)
+
+### 📝 Convenções de Código
+
+#### TypeScript
+- **SEMPRE** use TypeScript strict mode
+- **SEMPRE** defina tipos explícitos para parâmetros e retornos
+- **SEMPRE** use interfaces para contratos
+- **SEMPRE** prefira `type` para unions e `interface` para objetos
+- **SEMPRE** use `const assertions` quando apropriado
+- **SEMPRE** evite `any`, use `unknown` quando necessário
+- **SEMPRE** use enums para valores constantes relacionados
+
+#### Nomenclatura
+- **SEMPRE** use PascalCase para classes, interfaces, enums e tipos
+- **SEMPRE** use camelCase para variáveis, funções e métodos
+- **SEMPRE** use UPPER_SNAKE_CASE para constantes
+- **SEMPRE** use kebab-case para arquivos e diretórios
+- **SEMPRE** prefixe interfaces com `I` quando necessário para clareza
+- **SEMPRE** use nomes descritivos e autoexplicativos
+
+#### Estrutura de Arquivos
+```
+src/
+├── domain/           # Entidades, Value Objects, Domain Services
+├── application/      # Use Cases, Application Services
+├── infrastructure/   # Repositories, External Services
+├── presentation/     # Controllers, DTOs, Middlewares
+└── shared/          # Utilitários compartilhados
+```
+
+### 🧪 Testes
+- **SEMPRE** escreva testes para novas funcionalidades
+- **SEMPRE** mantenha cobertura mínima de 80%
+- **SEMPRE** use AAA pattern (Arrange, Act, Assert)
+- **SEMPRE** nomeie testes de forma descritiva: `should [expected behavior] when [state under test]`
+- **SEMPRE** use mocks para dependências externas
+- **SEMPRE** teste casos de sucesso e falha
+- **SEMPRE** agrupe testes relacionados com `describe`
+
+#### Estrutura de Testes
+```typescript
+describe('UserService', () => {
+  describe('createUser', () => {
+    it('should create user successfully when valid data is provided', () => {
+      // Arrange
+      const userData = { name: 'John Doe', email: 'john@example.com' };
+      
+      // Act
+      const result = userService.createUser(userData);
+      
+      // Assert
+      expect(result).toBeDefined();
+      expect(result.name).toBe(userData.name);
+    });
+  });
+});
+```
+
+### 🗄️ Banco de Dados (Prisma)
+- **SEMPRE** use migrations para mudanças no schema
+- **SEMPRE** nomeie tabelas no singular
+- **SEMPRE** use snake_case para nomes de colunas
+- **SEMPRE** defina relacionamentos explicitamente
+- **SEMPRE** use índices para campos frequentemente consultados
+- **SEMPRE** valide dados antes de salvar no banco
+
+### 🌐 API (Fastify)
+- **SEMPRE** use DTOs para validação de entrada
+- **SEMPRE** retorne status codes apropriados
+- **SEMPRE** use middleware para validação e autenticação
+- **SEMPRE** documente endpoints com OpenAPI/Swagger
+- **SEMPRE** trate erros de forma consistente
+- **SEMPRE** use async/await, evite callbacks
+
+#### Estrutura de Controllers
+```typescript
+export class UserController {
+  constructor(private userService: UserService) {}
+
+  async createUser(request: FastifyRequest<{ Body: CreateUserDto }>, reply: FastifyReply) {
+    try {
+      const user = await this.userService.createUser(request.body);
+      return reply.status(201).send(user);
+    } catch (error) {
+      return reply.status(400).send({ error: error.message });
+    }
+  }
+}
+```
+
+### 📦 Gerenciamento de Pacotes
+- **SEMPRE** use PNPM para instalar dependências
+- **SEMPRE** adicione dependências no workspace correto
+- **SEMPRE** use workspace:* para dependências internas
+- **SEMPRE** mantenha dependências atualizadas
+- **SEMPRE** use exact versions para dependências críticas
+
+## 🔄 Padrões de Commit
+
+### Conventional Commits
+**SEMPRE** use o padrão Conventional Commits:
+
+```
+<type>[optional scope]: <description>
+
+[optional body]
+
+[optional footer(s)]
+```
+
+#### Tipos de Commit
+- `feat`: Nova funcionalidade
+- `fix`: Correção de bug
+- `docs`: Mudanças na documentação
+- `style`: Formatação, ponto e vírgula, etc.
+- `refactor`: Refatoração de código
+- `test`: Adição ou correção de testes
+- `chore`: Mudanças em ferramentas, configurações, etc.
+- `perf`: Melhorias de performance
+- `ci`: Mudanças em CI/CD
+- `build`: Mudanças no sistema de build
+
+#### Exemplos
+```bash
+feat(auth): add JWT authentication middleware
+fix(api): resolve user creation validation error
+docs(readme): update installation instructions
+refactor(domain): extract user validation logic
+test(user): add unit tests for user service
+chore(deps): update prisma to latest version
+```
+
+### Regras de Commit
+- **SEMPRE** use mensagens em português
+- **SEMPRE** use modo imperativo ("add" não "added")
+- **SEMPRE** seja específico e conciso
+- **SEMPRE** referencie issues quando relevante: `Closes #123`
+- **SEMPRE** quebre commits grandes em menores
+- **SEMPRE** teste antes de commitar
+
+## 🎨 Formatação e Linting
+
+### Biome
+- **SEMPRE** execute `pnpm lint` antes de commitar
+- **SEMPRE** execute `pnpm format-write` para formatar código
+- **SEMPRE** corrija todos os warnings de linting
+- **SEMPRE** mantenha configuração consistente do Biome
+
+### Prettier/ESLint
+- **SEMPRE** use aspas simples para strings
+- **SEMPRE** use ponto e vírgula
+- **SEMPRE** use trailing commas
+- **SEMPRE** mantenha linhas com máximo 100 caracteres
+- **SEMPRE** use indentação de 2 espaços
+
+## 🔒 Segurança
+
+### Dados Sensíveis
+- **SEMPRE** use variáveis de ambiente para configurações sensíveis
+- **SEMPRE** valide e sanitize inputs do usuário
+- **SEMPRE** use HTTPS em produção
+- **SEMPRE** implemente rate limiting
+- **SEMPRE** use hash para senhas (bcrypt/argon2)
+- **SEMPRE** implemente CORS adequadamente
+
+### Autenticação e Autorização
+- **SEMPRE** use JWT para autenticação
+- **SEMPRE** implemente refresh tokens
+- **SEMPRE** valide permissões em cada endpoint
+- **SEMPRE** use middleware de autenticação
+- **SEMPRE** implemente logout adequado
+
+## 📚 Documentação
+
+### Código
+- **SEMPRE** documente funções públicas com JSDoc
+- **SEMPRE** explique lógica complexa com comentários
+- **SEMPRE** mantenha README atualizado
+- **SEMPRE** documente APIs com OpenAPI/Swagger
+- **SEMPRE** mantenha CHANGELOG atualizado
+
+### Exemplo de JSDoc
+```typescript
+/**
+ * Cria um novo usuário no sistema
+ * @param userData - Dados do usuário a ser criado
+ * @returns Promise com o usuário criado
+ * @throws {ValidationError} Quando dados são inválidos
+ * @throws {DuplicateError} Quando email já existe
+ */
+async createUser(userData: CreateUserDto): Promise<User> {
+  // implementation
+}
+```
+
+## 🚀 Performance
+
+### Otimizações
+- **SEMPRE** use lazy loading quando apropriado
+- **SEMPRE** implemente cache para consultas frequentes
+- **SEMPRE** use paginação para listas grandes
+- **SEMPRE** otimize queries do banco de dados
+- **SEMPRE** use compression (gzip) na API
+- **SEMPRE** implemente connection pooling
+
+## 🐛 Debugging e Logs
+
+### Logging
+- **SEMPRE** use níveis apropriados de log (error, warn, info, debug)
+- **SEMPRE** inclua contexto relevante nos logs
+- **SEMPRE** não logue dados sensíveis
+- **SEMPRE** use structured logging (JSON)
+- **SEMPRE** implemente log rotation
+
+### Debugging
+- **SEMPRE** use debugger statements quando necessário
+- **SEMPRE** adicione logs em pontos críticos
+- **SEMPRE** teste cenários de erro
+- **SEMPRE** implemente health checks
+
+## 🔄 Workflow de Desenvolvimento
+
+### Branch Strategy
+- **SEMPRE** use Git Flow
+- **SEMPRE** crie branches feature a partir de `develop`
+- **SEMPRE** use nomes descritivos: `feature/user-authentication`
+- **SEMPRE** faça PR para `develop`
+- **SEMPRE** mantenha branches atualizadas
+
+### Pull Requests
+- **SEMPRE** escreva descrição clara do PR
+- **SEMPRE** referencie issues relacionadas
+- **SEMPRE** adicione screenshots quando relevante
+- **SEMPRE** mantenha PRs pequenos e focados
+- **SEMPRE** solicite review de pelo menos 2 pessoas
+
+### Code Review
+- **SEMPRE** revise código com atenção
+- **SEMPRE** verifique se testes foram adicionados
+- **SEMPRE** confirme se documentação foi atualizada
+- **SEMPRE** teste localmente antes de aprovar
+- **SEMPRE** seja construtivo nos comentários
+
+## 📋 Checklist de Desenvolvimento
+
+### Antes de Commitar
+- [ ] Código compila sem erros
+- [ ] Todos os testes passam
+- [ ] Linting sem warnings
+- [ ] Código formatado corretamente
+- [ ] Documentação atualizada
+- [ ] Commit message segue padrão
+
+### Antes de Fazer PR
+- [ ] Branch atualizada com develop
+- [ ] Todos os testes passam
+- [ ] Coverage mantido ou melhorado
+- [ ] Documentação atualizada
+- [ ] Screenshots adicionados (se UI)
+- [ ] PR description completa
+
+### Antes de Merge
+- [ ] Code review aprovado
+- [ ] CI/CD passando
+- [ ] Conflitos resolvidos
+- [ ] Branch atualizada
+- [ ] Testes de integração passando
+
+## 🎯 Objetivos de Qualidade
+
+### Métricas
+- **Cobertura de testes**: Mínimo 80%
+- **Performance**: Response time < 200ms para APIs
+- **Disponibilidade**: 99.9% uptime
+- **Segurança**: Zero vulnerabilidades críticas
+- **Documentação**: 100% das APIs documentadas
+
+### Monitoramento
+- **SEMPRE** implemente health checks
+- **SEMPRE** monitore performance
+- **SEMPRE** configure alertas para erros
+- **SEMPRE** mantenha logs estruturados
+- **SEMPRE** implemente métricas de negócio
+
+## 🚨 Regras Críticas (NUNCA FAÇA)
+
+- **NUNCA** commite código que não compila
+- **NUNCA** commite senhas ou tokens
+- **NUNCA** force push para branches principais
+- **NUNCA** merge sem code review
+- **NUNCA** ignore testes falhando
+- **NUNCA** use `any` sem justificativa
+- **NUNCA** deixe código comentado em produção
+- **NUNCA** ignore warnings de segurança
+
+## 📞 Suporte e Dúvidas
+
+- **Issues**: [GitHub Issues](https://github.com/rafaelsantana6/talentgrid/issues)
+- **Discussões**: [GitHub Discussions](https://github.com/rafaelsantana6/talentgrid/discussions)
+- **Documentação**: [docs/](docs/)
+
+---
+
+**Lembre-se**: Estas regras existem para manter a qualidade e consistência do código. Quando em dúvida, sempre prefira clareza e legibilidade sobre "código inteligente".
