@@ -1,4 +1,5 @@
-import { describe, it, expect } from 'vitest'
+import { describe, expect, it } from 'vitest'
+
 import { Maybe } from '../index'
 
 describe('Maybe', () => {
@@ -381,7 +382,7 @@ describe('Maybe', () => {
       const maybe = Maybe.some(complexObject)
 
       // Act
-      const mappedMaybe = maybe.map(obj => ({ ...obj, id: obj.id * 2 }))
+      const mappedMaybe = maybe.map((obj) => ({ ...obj, id: obj.id * 2 }))
 
       // Assert
       expect(mappedMaybe.isSome).toBe(true)
@@ -389,7 +390,7 @@ describe('Maybe', () => {
         expect(mappedMaybe.value).toEqual({
           id: 2,
           name: 'test',
-          nested: { value: true }
+          nested: { value: true },
         })
       }
     })
@@ -400,7 +401,7 @@ describe('Maybe', () => {
       const maybe = Maybe.some(array)
 
       // Act
-      const mappedMaybe = maybe.map(arr => arr.map(x => x * 2))
+      const mappedMaybe = maybe.map((arr) => arr.map((x) => x * 2))
 
       // Assert
       expect(mappedMaybe.isSome).toBe(true)
@@ -415,7 +416,7 @@ describe('Maybe', () => {
       const maybe = Maybe.some(fn)
 
       // Act
-      const mappedMaybe = maybe.map(f => f(5))
+      const mappedMaybe = maybe.map((f) => f(5))
 
       // Assert
       expect(mappedMaybe.isSome).toBe(true)
@@ -430,10 +431,10 @@ describe('Maybe', () => {
 
       // Act
       const result = maybe
-        .map(str => str.trim())
-        .map(str => str.toUpperCase())
-        .map(str => str.split(' '))
-        .map(words => words.join('-'))
+        .map((str) => str.trim())
+        .map((str) => str.toUpperCase())
+        .map((str) => str.split(' '))
+        .map((words) => words.join('-'))
 
       // Assert
       expect(result.isSome).toBe(true)

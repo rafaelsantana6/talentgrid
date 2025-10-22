@@ -1,15 +1,14 @@
-import { describe, it, expect } from 'vitest'
-import { 
-  BaseValidator, 
-  StringValidator, 
-  NumberValidator, 
-  ArrayValidator, 
-  ObjectValidator, 
-  RequiredValidator, 
-  OptionalValidator, 
-  EnumValidator, 
+import { describe, expect, it } from 'vitest'
+
+import {
+  ArrayValidator,
   DateValidator,
-  ValidationError 
+  EnumValidator,
+  NumberValidator,
+  ObjectValidator,
+  OptionalValidator,
+  RequiredValidator,
+  StringValidator
 } from '../index'
 
 describe('StringValidator', () => {

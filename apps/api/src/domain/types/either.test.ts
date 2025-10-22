@@ -1,4 +1,5 @@
-import { describe, it, expect } from 'vitest'
+import { describe, expect, it } from 'vitest'
+
 import { Either } from '../index'
 
 describe('Either', () => {
@@ -281,7 +282,7 @@ describe('Either', () => {
       const either = Either.right(complexObject)
 
       // Act
-      const mappedEither = either.map(obj => ({ ...obj, id: obj.id * 2 }))
+      const mappedEither = either.map((obj) => ({ ...obj, id: obj.id * 2 }))
 
       // Assert
       expect(mappedEither.isRight).toBe(true)
@@ -289,7 +290,7 @@ describe('Either', () => {
         expect(mappedEither.right).toEqual({
           id: 2,
           name: 'test',
-          nested: { value: true }
+          nested: { value: true },
         })
       }
     })
@@ -300,7 +301,7 @@ describe('Either', () => {
       const either = Either.right(fn)
 
       // Act
-      const mappedEither = either.map(f => f(5))
+      const mappedEither = either.map((f) => f(5))
 
       // Assert
       expect(mappedEither.isRight).toBe(true)

@@ -1,5 +1,6 @@
-import { describe, it, expect, vi } from 'vitest'
-import { Result, Either, Maybe, ValidationError, DomainError } from '../index'
+import { describe, expect, it, vi } from 'vitest'
+
+import { Result } from '../index'
 
 describe('Result', () => {
   describe('success', () => {
@@ -294,11 +295,7 @@ describe('Result', () => {
   describe('combine', () => {
     it('should combine multiple successful results', () => {
       // Arrange
-      const results = [
-        Result.success(1),
-        Result.success(2),
-        Result.success(3),
-      ]
+      const results = [Result.success(1), Result.success(2), Result.success(3)]
 
       // Act
       const combined = Result.combine(results)
@@ -312,12 +309,7 @@ describe('Result', () => {
 
     it('should fail when any result fails', () => {
       // Arrange
-      const results = [
-        Result.success(1),
-        Result.failure(new Error('Error 1')),
-        Result.success(3),
-        Result.failure(new Error('Error 2')),
-      ]
+      const results = [Result.success(1), Result.failure(new Error('Error 1')), Result.success(3), Result.failure(new Error('Error 2'))]
 
       // Act
       const combined = Result.combine(results)

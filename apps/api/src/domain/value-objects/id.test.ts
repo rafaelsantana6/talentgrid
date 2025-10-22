@@ -1,5 +1,6 @@
-import { describe, it, expect } from 'vitest'
-import { StringId, NumberId, UuidId, IdFactory, ValidationError } from '../index'
+import { describe, expect, it } from 'vitest'
+
+import { IdFactory, NumberId, StringId, UuidId } from '../index'
 
 describe('StringId', () => {
   describe('constructor', () => {
