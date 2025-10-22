@@ -100,7 +100,7 @@ export interface ISpecification<T> {
  * Interface para Serviços de Domínio
  * Serviços que contêm lógica de domínio que não pertence a uma entidade específica
  */
-export type IDomainService = {}
+export type IDomainService = Record<string, never>
 
 /**
  * Interface para Validação

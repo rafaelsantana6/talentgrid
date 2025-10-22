@@ -1,6 +1,9 @@
 import type { IEntity, IId, IRepository, ISpecification, IUnitOfWork } from '../interfaces'
 import type { Maybe, Result } from '../types'
 
+// Exporta interfaces específicas de repositórios
+export * from './employee-repository'
+
 /**
  * Interface estendida para repositórios com funcionalidades avançadas
  * @template TEntity - Tipo da entidade

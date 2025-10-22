@@ -98,7 +98,7 @@ export class NumberId extends Id<number> {
   }
 
   protected validate(): void {
-    if (typeof this._value !== 'number' || isNaN(this._value)) {
+    if (typeof this._value !== 'number' || Number.isNaN(this._value)) {
       throw new ValidationError('ID must be a valid number', 'id', this._value);
     }
     
