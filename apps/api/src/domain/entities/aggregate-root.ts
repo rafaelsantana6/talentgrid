@@ -1,5 +1,4 @@
 import type { IAggregateRoot, IDomainEvent, IId } from '../interfaces'
-import { DomainError } from '../types'
 import { Entity } from './entity'
 
 /**
@@ -175,7 +174,7 @@ export abstract class SoftDeletableAggregateRoot<TId = string> extends Aggregate
    */
   delete(deletedBy?: string): void {
     if (this.isDeleted) {
-      throw new DomainError('Aggregate is already deleted')
+      throw new Error('Aggregate is already deleted')
     }
 
     this._deletedAt = new Date()
@@ -188,7 +187,7 @@ export abstract class SoftDeletableAggregateRoot<TId = string> extends Aggregate
    */
   restore(): void {
     if (!this.isDeleted) {
-      throw new DomainError('Aggregate is not deleted')
+      throw new Error('Aggregate is not deleted')
     }
 
     this._deletedAt = undefined
@@ -206,7 +205,7 @@ export abstract class OptimisticLockAggregateRoot<TId = string> extends Aggregat
    */
   checkVersion(expectedVersion: number): void {
     if (this._version !== expectedVersion) {
-      throw new DomainError(`Concurrency conflict. Expected version ${expectedVersion}, but got ${this._version}`)
+      throw new Error(`Concurrency conflict. Expected version ${expectedVersion}, but got ${this._version}`)
     }
   }
 
