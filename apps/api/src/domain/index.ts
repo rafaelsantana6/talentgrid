@@ -1,8 +1,8 @@
 // Interfaces do domínio
 export * from './interfaces'
 
-// Tipos base (exceto ValidationError que já está em interfaces)
-export { Result, Either, Maybe, DomainError, EntityNotFoundError, BusinessRuleViolationError, OperationNotAllowedError, ConcurrencyError } from './types'
+// Tipos base
+export * from './types'
 
 // Entidades
 export * from './entities/entity'
