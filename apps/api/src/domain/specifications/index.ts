@@ -396,7 +396,7 @@ export class SpecificationBuilder<T> {
     }
 
     if (this.specifications.length === 1) {
-      return this.specifications[0]
+      return this.specifications[0]!
     }
 
     return this.specifications.reduce((acc, spec) => acc.and(spec))
@@ -411,7 +411,7 @@ export class SpecificationBuilder<T> {
     }
 
     if (this.specifications.length === 1) {
-      return this.specifications[0]
+      return this.specifications[0]!
     }
 
     return this.specifications.reduce((acc, spec) => acc.or(spec))

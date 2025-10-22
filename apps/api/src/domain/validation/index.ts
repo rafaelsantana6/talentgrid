@@ -1,4 +1,4 @@
-import type { ValidationError as IValidationError, IValidator } from '../interfaces'
+import type { ValidationError as IValidationError, IValidator, IResult } from '../interfaces'
 import { Result, ValidationError } from '../types'
 
 /**
@@ -9,7 +9,7 @@ export abstract class BaseValidator<T> implements IValidator<T> {
   /**
    * Valida os dados de entrada
    */
-  abstract validate(data: unknown): Result<T, IValidationError[]>
+  abstract validate(data: unknown): IResult<T, IValidationError[]>
 
   /**
    * Valida um campo específico

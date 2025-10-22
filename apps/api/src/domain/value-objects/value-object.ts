@@ -79,7 +79,7 @@ export abstract class PrimitiveValueObject extends ValueObject {
 
       // Comparação especial para objetos
       if (typeof value === 'object' && typeof otherValue === 'object' && value !== null && otherValue !== null) {
-        return this.objectsEqual(value, otherValue)
+        return this.objectsEqual(value as Record<string, unknown>, otherValue as Record<string, unknown>)
       }
 
       return value === otherValue
@@ -108,7 +108,7 @@ export abstract class PrimitiveValueObject extends ValueObject {
       }
 
       if (typeof item === 'object' && typeof otherItem === 'object' && item !== null && otherItem !== null) {
-        return this.objectsEqual(item, otherItem)
+        return this.objectsEqual(item as Record<string, unknown>, otherItem as Record<string, unknown>)
       }
 
       return item === otherItem
@@ -144,7 +144,7 @@ export abstract class PrimitiveValueObject extends ValueObject {
    * Calcula hash code para um array de valores
    */
   private calculateHash(values: unknown[]): number {
-    return values.reduce((hash, value) => {
+    return values.reduce((hash: number, value) => {
       const valueHash = this.hashValue(value)
       hash = (hash << 5) - hash + valueHash
       return hash & hash // Convert to 32-bit integer

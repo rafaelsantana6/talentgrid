@@ -42,7 +42,7 @@ export class Result<T, E = Error> {
       return Result.failure(new Error(errors.map(e => e.message).join(', ')));
     }
 
-    const values = results.map(r => r.value!) as T;
+    const values = results.map(r => r.value!) as unknown as T;
     return Result.success(values);
   }
 
@@ -302,11 +302,12 @@ export class Maybe<T> {
  */
 export abstract class DomainError extends Error {
   abstract readonly code: string;
-  abstract readonly details?: Record<string, unknown>;
+  readonly details?: Record<string, unknown>;
 
-  constructor(message: string) {
+  constructor(message: string, details?: Record<string, unknown>) {
     super(message);
     this.name = this.constructor.name;
+    this.details = details;
   }
 }
 
@@ -322,8 +323,7 @@ export class ValidationError extends DomainError {
     public readonly value?: unknown,
     details?: Record<string, unknown>,
   ) {
-    super(message);
-    this.details = details;
+    super(message, details);
   }
 }
 
@@ -345,8 +345,7 @@ export class BusinessRuleViolationError extends DomainError {
   readonly code = 'BUSINESS_RULE_VIOLATION';
   
   constructor(rule: string, details?: Record<string, unknown>) {
-    super(`Business rule violated: ${rule}`);
-    this.details = details;
+    super(`Business rule violated: ${rule}`, details);
   }
 }
 

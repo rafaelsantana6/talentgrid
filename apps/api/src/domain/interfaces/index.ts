@@ -6,6 +6,7 @@ export interface IId<T = string> {
   readonly value: T
   equals(other: IId<T>): boolean
   toString(): string
+  hashCode(): number
 }
 
 /**
