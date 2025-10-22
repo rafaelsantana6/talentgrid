@@ -1,0 +1,23 @@
+{
+	"name": "talentgrid",
+	"private": true,
+	"scripts": {
+		"dev": "turbo dev",
+		"build": "turbo build",
+		"clean": "turbo run clean && rm -rf node_modules",
+		"format-write": "biome format --write .",
+		"lint": "biome check .",
+		"lint:fix": "biome check . --write",
+		"check-types": "turbo check-types"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "catalog:",
+		"@talentgrid/typescript-config": "workspace:*",
+		"turbo": "catalog:",
+		"typescript": "catalog:"
+	},
+	"packageManager": "pnpm@10.6.2",
+	"engines": {
+		"node": ">=25.0.0"
+	}
+}
