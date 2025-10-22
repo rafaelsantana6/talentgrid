@@ -1,0 +1,14 @@
+{
+  "extends": "@talentgrid/typescript-config/base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "~*": ["./src/*"],
+    },
+    "types": ["vitest/globals"],
+    "moduleResolution": "Bundler", 
+    "module": "ESNext"
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
+}

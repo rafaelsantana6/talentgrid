@@ -1,0 +1,45 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.0.6/schema.json",
+  "extends": "//",
+  "root": false,
+  "files": {
+    "ignoreUnknown": true,
+    "includes": [
+      "tsconfig.{json,vitest.json}",
+      "tsup.config.ts",
+      "vitest.config.{e2e,mts}",
+      "prisma.config.ts",
+      "src/**/*.ts"
+    ]
+  },
+  "linter": {
+    "rules": {
+      "complexity": {},
+      "correctness": {},
+      "suspicious": {},
+      "style": {}
+    }
+  },
+  "overrides": [
+    {
+      "includes": [
+        "**/*.spec.ts"
+      ],
+      "linter": {
+        "enabled": true,
+        "rules": {
+          "style": {
+            "noNonNullAssertion": "info"
+          },
+          "correctness": {
+            "noUnusedFunctionParameters": "info",
+            "noUnusedVariables": "info"
+          },
+          "suspicious": {
+            "noExplicitAny": "info"
+          }
+        }
+      }
+    }
+  ]
+}

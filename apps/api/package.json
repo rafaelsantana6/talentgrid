@@ -1,0 +1,38 @@
+{
+  "name": "@talentgrid/api",
+  "version": "0.0.0",
+  "description": "API for Talent Grid",
+  "type": "module",
+  "main": "dist/server.js",
+  "types": "dist/server.d.ts",
+  "scripts": {
+    "dev": "tsx watch --env-file=.env.dev src/main/server.ts",
+    "start:homolog": "node --env-file=.env.homolog dist/server.js",
+    "start:prod": "node --env-file=.env.prod dist/server.js",
+    "build": "tsup --no-splitting",
+    "lint": "biome lint --no-errors-on-unmatched",
+    "lint:fix": "biome lint --write --no-errors-on-unmatched",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:watch:coverage": "vitest --coverage",
+    "test:coverage": "vitest run --coverage",
+    "test:ui": "vitest --ui"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "@vitest/coverage-istanbul": "catalog:testing",
+    "@vitest/coverage-v8": "catalog:testing",
+    "@vitest/ui": "catalog:testing",
+    "globals": "catalog:",
+    "tsup": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:",
+    "vite-tsconfig-paths": "catalog:",
+    "vitest": "catalog:testing",
+    "vitest-mock-extended": "catalog:testing"
+  },
+  "dependencies": {}
+}
