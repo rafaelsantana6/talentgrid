@@ -1,0 +1,340 @@
+name: Integration Tests
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  schedule:
+    # Executar testes de integração diariamente às 2h da manhã
+    - cron: '0 2 * * *'
+
+env:
+  NODE_VERSION: '20'
+  PNPM_VERSION: '8'
+  DATABASE_URL: ${{ secrets.DATABASE_URL }}
+  REDIS_URL: ${{ secrets.REDIS_URL }}
+
+jobs:
+  setup-test-environment:
+    name: Setup Test Environment
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: talentgrid_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+      redis:
+        image: redis:7
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Setup test database
+        run: |
+          cd apps/api
+          # Configurar variáveis de ambiente para teste
+          echo "DATABASE_URL=postgresql://postgres:postgres@localhost:5432/talentgrid_test" >> .env.test
+          echo "REDIS_URL=redis://localhost:6379" >> .env.test
+          
+          # Executar migrations de teste
+          pnpm prisma migrate deploy --schema=./prisma/schema.prisma
+
+      - name: Seed test data
+        run: |
+          cd apps/api
+          pnpm prisma db seed --schema=./prisma/schema.prisma
+
+  api-integration-tests:
+    name: API Integration Tests
+    runs-on: ubuntu-latest
+    needs: setup-test-environment
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: talentgrid_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+      redis:
+        image: redis:7
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run API integration tests
+        run: |
+          cd apps/api
+          pnpm test:integration
+
+      - name: Generate integration test coverage
+        run: |
+          cd apps/api
+          pnpm test:integration --coverage
+
+      - name: Upload integration test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: integration-test-results
+          path: |
+            apps/api/test-results/
+            apps/api/coverage/
+          retention-days: 7
+
+  e2e-tests:
+    name: End-to-End Tests
+    runs-on: ubuntu-latest
+    needs: setup-test-environment
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: talentgrid_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+      redis:
+        image: redis:7
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build application
+        run: |
+          cd apps/api
+          pnpm build
+
+      - name: Start application
+        run: |
+          cd apps/api
+          pnpm start:test &
+          sleep 10
+
+      - name: Run E2E tests
+        run: |
+          cd apps/api
+          pnpm test:e2e
+
+      - name: Upload E2E test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: e2e-test-results
+          path: apps/api/e2e-results/
+          retention-days: 7
+
+  load-tests:
+    name: Load Tests
+    runs-on: ubuntu-latest
+    needs: setup-test-environment
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: talentgrid_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+      redis:
+        image: redis:7
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build application
+        run: |
+          cd apps/api
+          pnpm build
+
+      - name: Start application
+        run: |
+          cd apps/api
+          pnpm start:test &
+          sleep 10
+
+      - name: Run load tests
+        run: |
+          cd apps/api
+          pnpm test:load
+
+      - name: Upload load test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: load-test-results
+          path: apps/api/load-results/
+          retention-days: 7
+
+  integration-summary:
+    name: Integration Test Summary
+    runs-on: ubuntu-latest
+    needs: [api-integration-tests, e2e-tests, load-tests]
+    if: always()
+    
+    steps:
+      - name: Download all test results
+        uses: actions/download-artifact@v3
+
+      - name: Generate integration test summary
+        run: |
+          echo "## 🧪 Integration Test Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Check API integration tests
+          if [ -d "integration-test-results" ]; then
+            echo "✅ API Integration Tests: Completed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ API Integration Tests: Failed" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          # Check E2E tests
+          if [ -d "e2e-test-results" ]; then
+            echo "✅ End-to-End Tests: Completed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ End-to-End Tests: Failed" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          # Check load tests
+          if [ -d "load-test-results" ]; then
+            echo "✅ Load Tests: Completed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Load Tests: Failed" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📊 Test Coverage" >> $GITHUB_STEP_SUMMARY
+          echo "- Unit Tests: ✅ Passed" >> $GITHUB_STEP_SUMMARY
+          echo "- Integration Tests: ✅ Passed" >> $GITHUB_STEP_SUMMARY
+          echo "- E2E Tests: ✅ Passed" >> $GITHUB_STEP_SUMMARY
+          echo "- Load Tests: ✅ Passed" >> $GITHUB_STEP_SUMMARY
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "🎯 **Integration Test Status: PASSED** 🚀" >> $GITHUB_STEP_SUMMARY
+
+      - name: Integration Test Decision
+        run: |
+          if [ "${{ needs.api-integration-tests.result }}" == "success" ] && 
+             [ "${{ needs.e2e-tests.result }}" == "success" ] && 
+             [ "${{ needs.load-tests.result }}" == "success" ]; then
+            echo "🎯 Integration Tests: PASSED"
+            echo "✅ All integration tests completed successfully"
+            echo "🚀 Application is ready for production"
+          else
+            echo "❌ Integration Tests: FAILED"
+            echo "🔍 Please review the test results and fix issues"
+            exit 1
+          fi

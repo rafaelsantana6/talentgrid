@@ -1,0 +1,73 @@
+# Configurações do GitHub Actions para Talent Grid
+
+# Configurações de cache
+cache:
+  # Cache das dependências do PNPM
+  pnpm-store: true
+  
+  # Cache do build
+  build-cache: true
+  
+  # Cache dos testes
+  test-cache: true
+
+# Configurações de notificação
+notifications:
+  # Notificar em falhas
+  on-failure: true
+  
+  # Notificar em sucesso (apenas para main)
+  on-success: false
+  
+  # Notificar em cancelamento
+  on-cancellation: true
+
+# Configurações de timeout
+timeouts:
+  # Timeout padrão para jobs (30 minutos)
+  default: 30m
+  
+  # Timeout para testes (15 minutos)
+  tests: 15m
+  
+  # Timeout para build (20 minutos)
+  build: 20m
+
+# Configurações de ambiente
+environments:
+  staging:
+    # Proteger ambiente de staging
+    protection_rules:
+      - required_reviewers: 1
+      - wait_timer: 0
+    
+  production:
+    # Proteger ambiente de produção
+    protection_rules:
+      - required_reviewers: 2
+      - wait_timer: 5m
+
+# Configurações de segurança
+security:
+  # Executar em runners privados se disponível
+  use-private-runners: false
+  
+  # Permitir forks
+  allow-forks: true
+  
+  # Permitir pull requests de forks
+  allow-fork-prs: true
+
+# Configurações de relatórios
+reports:
+  # Gerar relatório de cobertura
+  coverage: true
+  
+  # Gerar relatório de performance
+  performance: true
+  
+  # Gerar relatório de qualidade
+  quality: true
+  
+  # Upload de artefatos
+  artifacts: true
