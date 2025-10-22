@@ -1,5 +1,5 @@
-import { PrimitiveValueObject } from './value-object'
 import { ValidationError } from '../types'
+import { PrimitiveValueObject } from './value-object'
 
 /**
  * Value Object para CNH (Carteira Nacional de Habilitação)
@@ -78,25 +78,25 @@ export class Cnh extends PrimitiveValueObject {
     // Primeiro dígito verificador
     let sum = 0
     for (let i = 0; i < 9; i++) {
-      sum += parseInt(cnh[i]!) * (9 - i)
+      sum += parseInt(cnh[i]!, 10) * (9 - i)
     }
     let remainder = sum % 11
     const firstDigit = remainder < 2 ? 0 : 11 - remainder
 
-    if (parseInt(cnh[9]!) !== firstDigit) {
+    if (parseInt(cnh[9]!, 10) !== firstDigit) {
       return false
     }
 
     // Segundo dígito verificador
     sum = 0
     for (let i = 0; i < 9; i++) {
-      sum += parseInt(cnh[i]!) * (9 - i)
+      sum += parseInt(cnh[i]!, 10) * (9 - i)
     }
-    sum += parseInt(cnh[9]!) * 2
+    sum += parseInt(cnh[9]!, 10) * 2
     remainder = sum % 11
     const secondDigit = remainder < 2 ? 0 : 11 - remainder
 
-    return parseInt(cnh[10]!) === secondDigit
+    return parseInt(cnh[10]!, 10) === secondDigit
   }
 
   /**

@@ -1,5 +1,5 @@
-import { PrimitiveValueObject } from './value-object'
 import { ValidationError } from '../types'
+import { PrimitiveValueObject } from './value-object'
 
 /**
  * Value Object para Telefone
@@ -33,7 +33,7 @@ export class Phone extends PrimitiveValueObject {
    */
   get formattedValue(): string {
     const numbers = this.rawValue
-    
+
     if (numbers.length === 10) {
       // Telefone fixo: (XX) XXXX-XXXX
       return `(${numbers.slice(0, 2)}) ${numbers.slice(2, 6)}-${numbers.slice(6, 10)}`
@@ -41,7 +41,7 @@ export class Phone extends PrimitiveValueObject {
       // Celular: (XX) XXXXX-XXXX
       return `(${numbers.slice(0, 2)}) ${numbers.slice(2, 7)}-${numbers.slice(7, 11)}`
     }
-    
+
     return numbers
   }
 
@@ -95,7 +95,7 @@ export class Phone extends PrimitiveValueObject {
     }
 
     // Verifica se o DDD é válido (11-99)
-    const areaCode = parseInt(numbers.slice(0, 2))
+    const areaCode = parseInt(numbers.slice(0, 2), 10)
     if (areaCode < 11 || areaCode > 99) {
       throw new ValidationError('Invalid area code', 'phone', this._value)
     }

@@ -1,5 +1,5 @@
-import { PrimitiveValueObject } from './value-object'
 import { ValidationError } from '../types'
+import { PrimitiveValueObject } from './value-object'
 
 /**
  * Value Object para Email
@@ -66,7 +66,8 @@ export class Email extends PrimitiveValueObject {
     }
 
     // Verifica o formato básico
-    const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
+    const emailRegex =
+      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
     if (!emailRegex.test(this._value)) {
       throw new ValidationError('Invalid email format', 'email', this._value)
     }

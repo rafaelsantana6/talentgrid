@@ -1,24 +1,26 @@
 import { AuditableAggregateRoot } from '../entities/aggregate-root'
-import { Id } from '../value-objects/id'
-import { Cpf } from '../value-objects/cpf'
-import { Email } from '../value-objects/email'
-import { Salary } from '../value-objects/salary'
-import { Address } from '../value-objects/address'
+import { BusinessRuleViolationError, ValidationError } from '../types'
+import type { Address } from '../value-objects/address'
+import type { Cnh } from '../value-objects/cnh'
+import type { Cpf } from '../value-objects/cpf'
+import type { Dependent } from '../value-objects/dependent'
+import type { Email } from '../value-objects/email'
+import type { Phone } from '../value-objects/phone'
+import type { Rg } from '../value-objects/rg'
 import {
-  MaritalStatus,
-  Gender,
-  ContractType,
+  type AddressType,
+  type BenefitStatus,
+  type BenefitType,
+  type ContactType,
+  type ContractType,
+  type DocumentType,
+  type EducationLevel,
   EmployeeStatus,
-  EducationLevel,
-  DocumentType,
-  AddressType,
-  ContactType,
-  DependentStatus,
-  DependentType,
-  BenefitStatus,
-  BenefitType
+  type Gender,
+  type MaritalStatus,
 } from '../value-objects/enums'
-import { ValidationError, BusinessRuleViolationError } from '../types'
+import type { Id } from '../value-objects/id'
+import type { Salary } from '../value-objects/salary'
 
 /**
  * Interface para dados de documento
@@ -183,7 +185,7 @@ export class Employee extends AuditableAggregateRoot {
     updatedBy?: string
   ) {
     super(id, version, createdAt, updatedAt, createdBy, updatedBy)
-    
+
     this._firstName = firstName
     this._lastName = lastName
     this._birthDate = birthDate
@@ -450,11 +452,11 @@ export class Employee extends AuditableAggregateRoot {
     const birthDate = this._birthDate
     let age = today.getFullYear() - birthDate.getFullYear()
     const monthDiff = today.getMonth() - birthDate.getMonth()
-    
+
     if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
       age--
     }
-    
+
     return age
   }
 
@@ -507,7 +509,7 @@ export class Employee extends AuditableAggregateRoot {
     const minAge = 16
     const minBirthDate = new Date()
     minBirthDate.setFullYear(today.getFullYear() - minAge)
-    
+
     if (this._birthDate > minBirthDate) {
       throw new ValidationError(`Employee must be at least ${minAge} years old`, 'birthDate', this._birthDate)
     }
@@ -603,7 +605,7 @@ export class Employee extends AuditableAggregateRoot {
   }
 
   removeDocument(documentType: DocumentType, updatedBy?: string): void {
-    const index = this._additionalDocuments.findIndex(doc => doc.type === documentType)
+    const index = this._additionalDocuments.findIndex((doc) => doc.type === documentType)
     if (index > -1) {
       this._additionalDocuments.splice(index, 1)
       this.touch(updatedBy)
@@ -617,7 +619,7 @@ export class Employee extends AuditableAggregateRoot {
   }
 
   removeContact(contactType: ContactType, updatedBy?: string): void {
-    const index = this._additionalContacts.findIndex(contact => contact.type === contactType)
+    const index = this._additionalContacts.findIndex((contact) => contact.type === contactType)
     if (index > -1) {
       this._additionalContacts.splice(index, 1)
       this.touch(updatedBy)
@@ -631,7 +633,7 @@ export class Employee extends AuditableAggregateRoot {
   }
 
   removeAddress(addressType: AddressType, updatedBy?: string): void {
-    const index = this._additionalAddresses.findIndex(addr => addr.type === addressType)
+    const index = this._additionalAddresses.findIndex((addr) => addr.type === addressType)
     if (index > -1) {
       this._additionalAddresses.splice(index, 1)
       this.touch(updatedBy)
@@ -645,7 +647,7 @@ export class Employee extends AuditableAggregateRoot {
   }
 
   removeDependent(dependentName: string, updatedBy?: string): void {
-    const index = this._dependents.findIndex(dep => dep.name === dependentName)
+    const index = this._dependents.findIndex((dep) => dep.name === dependentName)
     if (index > -1) {
       this._dependents.splice(index, 1)
       this.touch(updatedBy)
@@ -659,7 +661,7 @@ export class Employee extends AuditableAggregateRoot {
   }
 
   removeBenefit(benefitType: BenefitType, updatedBy?: string): void {
-    const index = this._benefits.findIndex(benefit => benefit.type === benefitType)
+    const index = this._benefits.findIndex((benefit) => benefit.type === benefitType)
     if (index > -1) {
       this._benefits.splice(index, 1)
       this.touch(updatedBy)
@@ -718,7 +720,7 @@ export class Employee extends AuditableAggregateRoot {
       createdAt: this.createdAt.toISOString(),
       updatedAt: this.updatedAt.toISOString(),
       createdBy: this.createdBy,
-      updatedBy: this.updatedBy
+      updatedBy: this.updatedBy,
     }
   }
 

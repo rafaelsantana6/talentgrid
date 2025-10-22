@@ -1,6 +1,6 @@
-import { PrimitiveValueObject } from './value-object'
 import { ValidationError } from '../types'
 import { AddressType } from './enums'
+import { PrimitiveValueObject } from './value-object'
 
 /**
  * Value Object para Endereço
@@ -82,17 +82,17 @@ export class Address extends PrimitiveValueObject {
    */
   get formattedAddress(): string {
     let address = `${this._street}, ${this._number}`
-    
+
     if (this._complement) {
       address += `, ${this._complement}`
     }
-    
+
     address += `, ${this._neighborhood}, ${this._city}/${this._state}, ${this._zipCode}`
-    
+
     if (this._country !== 'Brasil') {
       address += `, ${this._country}`
     }
-    
+
     return address
   }
 
@@ -157,9 +157,33 @@ export class Address extends PrimitiveValueObject {
 
     // Validação do estado brasileiro
     const validStates = [
-      'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA',
-      'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN',
-      'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'
+      'AC',
+      'AL',
+      'AP',
+      'AM',
+      'BA',
+      'CE',
+      'DF',
+      'ES',
+      'GO',
+      'MA',
+      'MT',
+      'MS',
+      'MG',
+      'PA',
+      'PB',
+      'PR',
+      'PE',
+      'PI',
+      'RJ',
+      'RN',
+      'RS',
+      'RO',
+      'RR',
+      'SC',
+      'SP',
+      'SE',
+      'TO',
     ]
 
     if (this._country === 'Brasil' && !validStates.includes(this._state.toUpperCase())) {
@@ -185,7 +209,7 @@ export class Address extends PrimitiveValueObject {
       this._state,
       this._zipCode,
       this._country,
-      this._type
+      this._type,
     ]
   }
 

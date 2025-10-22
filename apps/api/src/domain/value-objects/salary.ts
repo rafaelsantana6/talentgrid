@@ -1,5 +1,5 @@
-import { PrimitiveValueObject } from './value-object'
 import { ValidationError } from '../types'
+import { PrimitiveValueObject } from './value-object'
 
 /**
  * Value Object para Salário
@@ -27,7 +27,7 @@ export class Salary extends PrimitiveValueObject {
   get formattedValue(): string {
     return new Intl.NumberFormat('pt-BR', {
       style: 'currency',
-      currency: 'BRL'
+      currency: 'BRL',
     }).format(this._value)
   }
 

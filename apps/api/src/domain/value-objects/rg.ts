@@ -1,5 +1,5 @@
-import { PrimitiveValueObject } from './value-object'
 import { ValidationError } from '../types'
+import { PrimitiveValueObject } from './value-object'
 
 /**
  * Value Object para RG (Registro Geral)

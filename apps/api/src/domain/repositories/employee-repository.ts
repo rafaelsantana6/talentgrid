@@ -1,6 +1,6 @@
-import type { IRepository, IId } from '../interfaces'
 import type { Employee } from '../entities/employee'
-import { Maybe } from '../types'
+import type { IRepository } from '../interfaces'
+import type { Maybe } from '../types'
 
 /**
  * Interface para o repositório de Employee

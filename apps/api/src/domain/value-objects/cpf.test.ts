@@ -1,13 +1,14 @@
-import { describe, it, expect } from 'vitest'
-import { Cpf } from './cpf'
+import { describe, expect, it } from 'vitest'
+
 import { ValidationError } from '../types'
+import { Cpf } from './cpf'
 
 describe('Cpf', () => {
   describe('constructor', () => {
     it('should create a valid CPF when given a valid number', () => {
       const validCpf = '11144477735'
       const cpf = new Cpf(validCpf)
-      
+
       expect(cpf.value).toBe(validCpf)
       expect(cpf.rawValue).toBe(validCpf)
       expect(cpf.formattedValue).toBe('111.444.777-35')
@@ -16,7 +17,7 @@ describe('Cpf', () => {
     it('should create a valid CPF when given a formatted number', () => {
       const formattedCpf = '111.444.777-35'
       const cpf = new Cpf(formattedCpf)
-      
+
       expect(cpf.rawValue).toBe('11144477735')
       expect(cpf.formattedValue).toBe('111.444.777-35')
     })
@@ -36,9 +37,9 @@ describe('Cpf', () => {
     })
 
     it('should throw ValidationError when CPF is not a string', () => {
-      expect(() => new Cpf(null as any)).toThrow(ValidationError)
-      expect(() => new Cpf(undefined as any)).toThrow(ValidationError)
-      expect(() => new Cpf(123 as any)).toThrow(ValidationError)
+      expect(() => new Cpf(null as unknown as string)).toThrow(ValidationError)
+      expect(() => new Cpf(undefined as unknown as string)).toThrow(ValidationError)
+      expect(() => new Cpf(123 as unknown as string)).toThrow(ValidationError)
     })
   })
 
@@ -60,7 +61,7 @@ describe('Cpf', () => {
     it('should be equal when CPFs have same value', () => {
       const cpf1 = new Cpf('11144477735')
       const cpf2 = new Cpf('11144477735')
-      
+
       expect(cpf1.equals(cpf2)).toBe(true)
       expect(cpf1.hashCode()).toBe(cpf2.hashCode())
     })
@@ -68,14 +69,14 @@ describe('Cpf', () => {
     it('should be equal when CPFs have same value but different format', () => {
       const cpf1 = new Cpf('11144477735')
       const cpf2 = new Cpf('111.444.777-35')
-      
+
       expect(cpf1.equals(cpf2)).toBe(true)
     })
 
     it('should not be equal when CPFs have different values', () => {
       const cpf1 = new Cpf('11144477735')
       const cpf2 = new Cpf('12345678909')
-      
+
       expect(cpf1.equals(cpf2)).toBe(false)
     })
   })
@@ -84,7 +85,7 @@ describe('Cpf', () => {
     it('should create a copy of the CPF', () => {
       const originalCpf = new Cpf('11144477735')
       const clonedCpf = originalCpf.clone()
-      
+
       expect(clonedCpf.equals(originalCpf)).toBe(true)
       expect(clonedCpf).not.toBe(originalCpf)
     })

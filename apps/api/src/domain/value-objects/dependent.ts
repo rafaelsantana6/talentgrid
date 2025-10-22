@@ -1,6 +1,6 @@
-import { PrimitiveValueObject } from './value-object'
 import { ValidationError } from '../types'
-import type { DependentType, DependentStatus, Gender } from './enums'
+import type { DependentStatus, DependentType, Gender } from './enums'
+import { PrimitiveValueObject } from './value-object'
 
 /**
  * Value Object para Dependente
@@ -92,11 +92,11 @@ export class Dependent extends PrimitiveValueObject {
     const birthDate = this._birthDate
     let age = today.getFullYear() - birthDate.getFullYear()
     const monthDiff = today.getMonth() - birthDate.getMonth()
-    
+
     if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
       age--
     }
-    
+
     return age
   }
 
@@ -144,7 +144,7 @@ export class Dependent extends PrimitiveValueObject {
     const maxAge = 120
     const minBirthDate = new Date()
     minBirthDate.setFullYear(today.getFullYear() - maxAge)
-    
+
     if (this._birthDate < minBirthDate) {
       throw new ValidationError(`Birth date cannot be more than ${maxAge} years ago`, 'birthDate', this._birthDate)
     }
@@ -205,7 +205,7 @@ export class Dependent extends PrimitiveValueObject {
       this._status,
       this._isEmergencyContact,
       this._phone,
-      this._email
+      this._email,
     ]
   }
 

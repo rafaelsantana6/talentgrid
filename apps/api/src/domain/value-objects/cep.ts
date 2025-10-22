@@ -1,5 +1,5 @@
-import { PrimitiveValueObject } from './value-object'
 import { ValidationError } from '../types'
+import { PrimitiveValueObject } from './value-object'
 
 /**
  * Value Object para CEP (Código de Endereçamento Postal)
@@ -90,7 +90,7 @@ export class Cep extends PrimitiveValueObject {
       '66666666',
       '77777777',
       '88888888',
-      '99999999'
+      '99999999',
     ]
 
     if (invalidSequences.includes(numbers)) {

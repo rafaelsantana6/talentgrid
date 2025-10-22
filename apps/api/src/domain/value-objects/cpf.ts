@@ -1,5 +1,5 @@
-import { PrimitiveValueObject } from './value-object'
 import { ValidationError } from '../types'
+import { PrimitiveValueObject } from './value-object'
 
 /**
  * Value Object para CPF (Cadastro de Pessoa Física)
@@ -75,24 +75,24 @@ export class Cpf extends PrimitiveValueObject {
     // Primeiro dígito verificador
     let sum = 0
     for (let i = 0; i < 9; i++) {
-      sum += parseInt(cpf[i]!) * (10 - i)
+      sum += parseInt(cpf[i]!, 10) * (10 - i)
     }
     let remainder = sum % 11
     const firstDigit = remainder < 2 ? 0 : 11 - remainder
 
-    if (parseInt(cpf[9]!) !== firstDigit) {
+    if (parseInt(cpf[9]!, 10) !== firstDigit) {
       return false
     }
 
     // Segundo dígito verificador
     sum = 0
     for (let i = 0; i < 10; i++) {
-      sum += parseInt(cpf[i]!) * (11 - i)
+      sum += parseInt(cpf[i]!, 10) * (11 - i)
     }
     remainder = sum % 11
     const secondDigit = remainder < 2 ? 0 : 11 - remainder
 
-    return parseInt(cpf[10]!) === secondDigit
+    return parseInt(cpf[10]!, 10) === secondDigit
   }
 
   /**
